@@ -1,11 +1,12 @@
 import mysql.connector
-global cnx
+import os
 
 cnx = mysql.connector.connect(
-    MYSQL_DATABASE="railway",
-    MYSQLUSER="root",
-    MYSQLPASSWORD="BFQiNlCvYZctBMeqgbMVgKGmIYhJOSuN",
-    MYSQLDATABASE="pandeyji_eatery"
+    host=os.getenv("MYSQLHOST"),
+    port=os.getenv("MYSQLPORT"),
+    user=os.getenv("MYSQLUSER"),
+    password=os.getenv("MYSQLPASSWORD"),
+    database=os.getenv("MYSQLDATABASE")
 )
 
 # Function to call the MySQL stored procedure and insert an order item
