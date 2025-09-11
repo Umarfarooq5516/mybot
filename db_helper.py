@@ -1,13 +1,32 @@
 import mysql.connector
 import os
 
-cnx = mysql.connector.connect(
-    host=os.getenv("MYSQLHOST"),
-    port=os.getenv("MYSQLPORT"),
-    user=os.getenv("MYSQLUSER"),
-    password=os.getenv("MYSQLPASSWORD"),
-    database=os.getenv("MYSQLDATABASE")
-)
+def get_connection():
+    try:
+        cnx = mysql.connector.connect(
+            host=os.getenv("MYSQLHOST", "127.0.0.1"),   # Railway injects MYSQLHOST, else localhost
+            port=int(os.getenv("MYSQLPORT", 3306)),     # Railway injects MYSQLPORT, else 3306
+            user=os.getenv("MYSQLUSER", "root"),        # Railway injects MYSQLUSER, else root
+            password=os.getenv("MYSQLPASSWORD", ""),    # Railway injects MYSQLPASSWORD, else empty (for your local root if no password)
+            database=os.getenv("MYSQLDATABASE", "pandeyji_eatery")  # Railway injects MYSQLDATABASE, else your local db
+        )
+        print("✅ MySQL connected successfully")
+        return cnx
+    except mysql.connector.Error as err:
+        print(f"❌ Database connection failed: {err}")
+        return None
+
+# Example usage:
+if __name__ == "__main__":
+    connection = get_connection()
+    if connection:
+        cursor = connection.cursor()
+        cursor.execute("SHOW TABLES;")
+        for (table,) in cursor.fetchall():
+            print("Table:", table)
+        cursor.close()
+        connection.close()
+
 
 # Function to call the MySQL stored procedure and insert an order item
 def insert_order_item(food_item, quantity, order_id):
