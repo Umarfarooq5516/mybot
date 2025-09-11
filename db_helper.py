@@ -2,10 +2,10 @@ import mysql.connector
 global cnx
 
 cnx = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="1234",
-    database="pandeyji_eatery"
+    MYSQL_DATABASE="railway",
+    MYSQLUSER="root",
+    MYSQLPASSWORD="BFQiNlCvYZctBMeqgbMVgKGmIYhJOSuN",
+    MYSQLDATABASE="pandeyji_eatery"
 )
 
 # Function to call the MySQL stored procedure and insert an order item
